@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CustomerAPI.Controllers
 {
     [ApiController]
-    [Route("api / [controller]")]
+    [Route("api/[controller]")]
     public class CustomersController : Controller
     {
         private readonly CustomerDbContext _dbContext;
@@ -16,18 +16,24 @@ namespace CustomerAPI.Controllers
             _dbContext = dbContext;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CustomerDTO>>> GetCustomers() {
-         
-            var customers= await _dbContext.Customers.Select(c=>new CustomerDTO
+        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        {
+
+            return await _dbContext.Customers.ToListAsync();
+
+        }
+        [HttpGet("id")]
+        public async Task<ActionResult<Customer>> GetCustomer(int id)
+        {
+            var customer = await _dbContext.Customers.FindAsync(id);
             {
-                CustomerId = c.CustomerId,
-                FirstName=c.FirstName,
-                LastName=c.LastName,
-                Email=c.Email,
-                PhoneNumber=c.PhoneNumber,
-            }).ToListAsync();
-            
-            return customers;
+                if (customer == null)
+                {
+                    return NotFound();
+                }
+
+                return customer;
+            }
         }
     }
 }
