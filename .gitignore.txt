@@ -1,0 +1,11 @@
+*.suo
+*.user
+*.csproj.user
+.vs/
+bin/
+obj/
+packages/
+*.exe
+*.dll
+*.pdb
+*.nupkg
